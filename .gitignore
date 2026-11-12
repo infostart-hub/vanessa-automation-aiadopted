@@ -70,3 +70,8 @@ VanessaAutomationsingle/Templates/КлючевыеСловаGherkin/Ext/Template
 HelpTTS/
 lib/CF/83/ConfigDumpInfo.xml
 VAEditorCacheFiles/
+
+tools/python/__pycache__/
+
+# Local OneScript packages used by the native build.
+oscript_modules/

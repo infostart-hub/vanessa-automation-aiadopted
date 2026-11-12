@@ -13,7 +13,7 @@ namespaces = {
 Et.register_namespace("", "http://v8.1c.ru/8.3/MDClasses")
 
 path_to_dict = os.path.join(os.path.dirname(__file__), "DictException.txt")
-with open(path_to_dict, "r", encoding="utf-8") as f:
+with open(path_to_dict, encoding="utf-8") as f:
     our_dict = [x.strip() for x in f.readlines()]
 
 
@@ -76,7 +76,7 @@ def checkGrammar(text_for_check) -> list:
     # find those words that may be misspelled
     check = speller.spell(text_for_check)
     for res in check:
-        if res["s"] and res['word'] not in our_dict:  # Есть варианты замены
+        if res["s"] and res["word"] not in our_dict:  # Есть варианты замены
             result.append(f"{res['word']} -> {res['s']}")
 
     return result

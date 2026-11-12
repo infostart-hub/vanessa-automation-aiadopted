@@ -1,0 +1,41 @@
+[tools]
+"github:oscript-library/ovm" = "1.6.2"
+python = "3.12.15"
+uv = "0.13.6"
+java = "21"
+allure = "2.46.1"
+
+[tasks."setup:onescript"]
+description = "Установить рекомендованный OneScript 2.0.1 через OVM"
+run = "ovm install 2.0.1"
+
+[tasks."env:check"]
+description = "Проверить OneScript, Python, Java и Allure без смены глобальной среды"
+depends = ["setup:onescript"]
+run = ["ovm run 2.0.1 oscript -- -version", "python --version", "uv --version", "java -version", "allure --version"]
+
+[tasks.setup]
+description = "Загрузить OneScript-зависимости Vanessa Automation"
+depends = ["setup:onescript"]
+run = "ovm run 2.0.1 oscript -- ./lib/packages.os download"
+
+[tasks.compile]
+description = "Собрать EPF через штатные OneScript-сценарии"
+depends = ["setup"]
+run = ["ovm run 2.0.1 oscript -- ./tools/onescript/ZipTemplates.os", "ovm run 2.0.1 oscript -- ./tools/onescript/Compile.os ./"]
+
+[tasks."docs:setup"]
+description = "Подготовить зафиксированные зависимости документации"
+run = "uv run --with-requirements requirements-docs.txt mkdocs --version"
+
+[tasks."docs:check"]
+description = "Проверить сборку документации в строгом режиме"
+run = "uv run --with-requirements requirements-docs.txt mkdocs build --strict"
+
+[tasks."test:modal"]
+description = "Проверить распознавание окон на BSL-коде через установленный OneScript (OSCRIPT)"
+run = "python tools/python/test_modal_dialog.py"
+
+[tasks."lint:python"]
+description = "Проверить CPython-инструменты; Sikuli/Jython проверяется своим рантаймом"
+run = ["uvx --from ruff==0.16.7 ruff check --no-cache .", "uvx --from ruff==0.16.7 ruff format --no-cache --check ."]
